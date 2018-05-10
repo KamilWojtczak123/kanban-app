@@ -1,29 +1,23 @@
-import { CREATE_NOTE, UPDATE_NOTE, DELETE_NOTE } from './NoteActions';
-import { CREATE_LANE, DELETE_LANE } from './LaneActions';
+import { CREATE_NOTE, UPDATE_NOTE, DELETE_NOTE, CREATE_NOTES, EDIT_NOTE } from './NoteActions';
 
-const initialState = [];
+import omit from 'lodash/omit';
+
+const initialState = {};
 
 export default function notes(state = initialState, action) {
   switch (action.type) {
     case CREATE_NOTE:
-      return [...state, action.note];
-
-   case UPDATE_NOTE:
-     return state.map((note) => {
-       return note.id === action.id ? { ...note, ...action.note } : note;
-     });
-
+return { ...state, [action.note.id]: action.note };
+    case UPDATE_NOTE:
+      return { ...state, [action.note.id]: action.note };
+    case EDIT_NOTE: {
+      const note = { ...state[action.id], editing: true };
+      return { ...state, [action.id]: note };
+    }
     case DELETE_NOTE:
-      return state.filter((note) => note.id !== action.noteId);
-
-	case CREATE_LANE:
-  		return state.map(note => {
-    	if (note.id === action.noteId) {
-      		const lane = [...note.lane, action.lane.id];
-      		return { ...notes, lane };
-    	}
-    	return lane;
-  	});
+      return omit(state, action.noteId);
+    case CREATE_NOTES:
+      return { ...action.notes };
     default:
       return state;
   }

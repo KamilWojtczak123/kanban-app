@@ -3,7 +3,9 @@ import styles from './Edit.css';
 
 export default class Edit extends Component {
   checkEnter = (e) => {
-
+    if (e.key === 'Enter') {
+      this.finishEdit(e);
+    }
   }
   finishEdit = (e) => {
     const value = e.target.value;
@@ -35,15 +37,8 @@ export default class Edit extends Component {
          onKeyPress={this.checkEnter}
        />
      );
-   }
-  checkEnter = (e) => {
-    if (e.key === 'Enter') {
-      this.finishEdit(e);
-    }
   }
-   
   render() {
-
     return (
       <div className={this.props.className}>
         {this.props.editing ? this.renderEdit() : this.renderValue()}
@@ -51,6 +46,8 @@ export default class Edit extends Component {
     );
   }
 }
+
+
 
 Edit.propTypes = {
   value: PropTypes.string,
