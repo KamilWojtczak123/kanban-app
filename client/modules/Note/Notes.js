@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import Note from './Note';
 import Edit from '../../components/Edit';
 
+
 const Notes = ({ notes, laneId, editNote, updateNote, deleteNote}) => {
   return (
     <ul className="notes">

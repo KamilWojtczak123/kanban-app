@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import Lane from './Lane';
+
 import { deleteLane, updateLane, editLane, deleteLaneRequest, updateLaneRequest } from './LaneActions';
 import { createNoteRequest } from '../Note/NoteActions';
 

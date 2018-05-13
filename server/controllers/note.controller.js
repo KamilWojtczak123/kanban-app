@@ -10,7 +10,7 @@ export function addNote(req, res) {
   }
 
   const newNote = new Note({
-    task: note.task,
+    task: note.task
   });
 
   newNote.id = uuid();
@@ -26,5 +26,46 @@ export function addNote(req, res) {
       .then(() => {
         res.json(saved);
       });
+  });
+}
+
+export function deleteNote(req, res) {
+  Note.findOne({ id: req.params.noteId }).exec((err, note) => {
+    if (err) {
+      res.status(500).send(err);
+      return;
+    }
+    note.remove(err => {
+      if (err) {
+        res.status(500).send(err);
+        return;
+      }
+      Lane.findOne({ notes: note._id }).exec((err, lane) => {
+        if (err) {
+          res.status(500).send(err);
+          return;
+        }
+        lane.notes.pull(note);
+        lane.save(err => {
+          if (err) {
+            res.status(500).send(err);
+            return;
+          }
+          res.status(200).end();
+        });
+      });
+    });
+  });
+}
+
+export function editNote(req, res) {
+  Note.findOneAndUpdate(
+    { id: req.params.noteId },
+    { $set: { task: req.body.note.task } }
+  ).exec((err, note) => {
+    if (err) {
+      res.status(500).send(err);
+    }
+    res.json({ note });
   });
 }
